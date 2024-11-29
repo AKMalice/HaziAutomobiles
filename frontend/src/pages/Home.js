@@ -1,13 +1,35 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function Home() {
+const Home = () => {
+  const navigate = useNavigate();
+
+  const goToDash = () => {
+    navigate('/dash');
+  };
+
+  const goToLogin = () => {
+    navigate('/login');
+  };
+
+  const goToSignup = () => {
+    navigate('/signup');
+  };
+
   return (
-    <>
-    <Navbar/>
-    <div className="text-xl text-sky-600 text-center mt-4">Home Page</div>
-    </>
-  )
-}
+    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+      <h1>Welcome to the Home Page</h1>
+      <button onClick={goToDash} style={{ margin: '10px', padding: '10px 20px' }}>
+        Go to Dash
+      </button>
+      <button onClick={goToLogin} style={{ margin: '10px', padding: '10px 20px' }}>
+        Go to Login
+      </button>
+      <button onClick={goToSignup} style={{ margin: '10px', padding: '10px 20px' }}>
+        Go to Signup
+      </button>
+    </div>
+  );
+};
 
-export default Home
+export default Home;
