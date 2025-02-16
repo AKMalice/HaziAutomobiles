@@ -1,12 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="navbar bg-white/50 backdrop-blur-md fixed top-0 z-50">
+    <div className="navbar bg-white/50 backdrop-blur-md fixed top-0 z-50 w-full">
       <div className="navbar-start pl-4">
-        <img src={logo} alt="logo" className="h-12 w-52"/>
-        {/* <a className="text-2xl font-bold text-neutral">HAZI Automobiles</a> */}
+        <img src={logo} alt="logo" className="h-12 w-52 cursor-pointer" onClick={() => navigate('/')} />
       </div>
 
       {/* Mobile Hamburger Menu */}
@@ -15,7 +17,7 @@ const Navbar = () => {
           <div
             tabIndex={0}
             role="button"
-            className="btn btn-ghost text-neutral text-lg hover:text-white hover:bg-primary focus:text-white focus:bg-primary active:text-white active:bg-primary"
+            className="btn btn-ghost text-neutral text-lg hover:text-white hover:bg-primary"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -32,53 +34,26 @@ const Navbar = () => {
               />
             </svg>
           </div>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-white rounded-box w-52"
-          >
-            <li>
-              <a className="my-1 text-neutral text-lg hover:text-white hover:bg-primary active:bg-primary active:text-white">
-                Products
-              </a>
-            </li>
-            <li>
-              <a className="my-1 text-neutral text-lg hover:text-white hover:bg-primary active:bg-primary active:text-white">
-                Solutions
-              </a>
-            </li>
-            <li>
-              <a className="my-1 text-neutral text-lg hover:text-white hover:bg-primary active:bg-primary active:text-white">
-                About
-              </a>
-            </li>
-            <li>
-              <a className="my-1 text-neutral text-lg hover:text-white hover:bg-primary active:bg-primary active:text-white">
-                Contact
-              </a>
-            </li>
+          <ul className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-white rounded-box w-52">
+            <li><span className="menu-item cursor-pointer" onClick={() => navigate('/products')}>Products</span></li>
+            <li><span className="menu-item cursor-pointer" onClick={() => navigate('/solutions')}>Solutions</span></li>
+            <li><span className="menu-item cursor-pointer" onClick={() => navigate('/about')}>About</span></li>
+            <li><span className="menu-item cursor-pointer" onClick={() => navigate('/contact')}>Contact</span></li>
+            <li><span className="menu-item text-primary font-bold cursor-pointer" onClick={() => navigate('/login')}>Login</span></li>
           </ul>
         </div>
       </div>
 
       {/* Full Navbar for Larger Screens */}
-      <div className="navbar-end hidden lg:flex">
+      <div className="navbar-end hidden lg:flex items-center">
         <ul className="menu menu-horizontal pr-4">
-          <li>
-            <a className="mx-1 text-neutral text-lg hover:text-white hover:bg-primary active:bg-primary active:text-white">
-              Products
-            </a>
-          </li>
-          <li>
-            <a className="mx-1 text-neutral text-lg hover:text-white hover:bg-primary active:bg-primary active:text-white">
-              About
-            </a>
-          </li>
-          <li>
-            <a className="mx-1 text-neutral text-lg hover:text-white hover:bg-primary active:bg-primary active:text-white">
-              Contact
-            </a>
-          </li>
+          <li><span className="mx-1 text-neutral text-lg hover:text-white hover:bg-primary cursor-pointer" onClick={() => navigate('/products')}>Products</span></li>
+          <li><span className="mx-1 text-neutral text-lg hover:text-white hover:bg-primary cursor-pointer" onClick={() => navigate('/about')}>About</span></li>
+          <li><span className="mx-1 text-neutral text-lg hover:text-white hover:bg-primary cursor-pointer" onClick={() => navigate('/contact')}>Contact</span></li>
         </ul>
+        <button onClick={() => navigate('/login')} className="btn btn-primary text-white ml-4">
+          Login
+        </button>
       </div>
     </div>
   );
