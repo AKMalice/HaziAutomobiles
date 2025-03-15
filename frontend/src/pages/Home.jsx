@@ -4,8 +4,10 @@ import img from '../assets/hero.png';
 import p1 from '../assets/p1.jpg';
 import p2 from '../assets/p2.jpg';
 import p3 from '../assets/p3.jpg';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-[#f8fafc]">
 
@@ -25,7 +27,7 @@ const Home = () => {
                 Industry-leading manufacturer of premium excavator parts, dozer components, and precision-engineered solutions.
               </p>
               <div>
-                <button className="btn btn-primary text-white">Explore Products</button>
+                <button onClick={() => navigate('/products')} className="btn btn-primary text-white">Explore Products</button>
               </div>
             </div>
             <div className="relative h-[500px]">
