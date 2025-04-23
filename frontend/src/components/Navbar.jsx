@@ -2,8 +2,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
-const Navbar = () => {
+const Navbar = ({ isAdminLoggedIn }) => {
   const navigate = useNavigate();
+
+  // If the admin is logged in, do not show this Navbar
+  if (isAdminLoggedIn) {
+    return null;
+  }
 
   return (
     <div className="navbar bg-white/50 backdrop-blur-md fixed top-0 z-50 w-full">
