@@ -1,15 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ setIsUserLoggedIn }) => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    // Simulate successful login
+    setIsUserLoggedIn(true); // Set logged-in state
+    navigate('/products-list'); // Redirect to products-list page after login
+  };  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold text-center text-neutral mb-6">Login</h2>
         
-        <form>
+        <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-1">Email</label>
             <input
@@ -17,6 +26,8 @@ const Login = () => {
               className="input input-bordered w-full"
               placeholder="Enter your email"
               required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -27,6 +38,8 @@ const Login = () => {
               className="input input-bordered w-full"
               placeholder="Enter your password"
               required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 

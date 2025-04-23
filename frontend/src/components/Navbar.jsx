@@ -2,18 +2,27 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
-const Navbar = ({ isAdminLoggedIn }) => {
+const Navbar = ({ isAdminLoggedIn, isUserLoggedIn, setIsUserLoggedIn }) => {
   const navigate = useNavigate();
 
-  // If the admin is logged in, do not show this Navbar
   if (isAdminLoggedIn) {
     return null;
   }
 
+  const handleLogout = () => {
+    setIsUserLoggedIn(false);
+    navigate('/login');
+  };
+
   return (
     <div className="navbar bg-white/50 backdrop-blur-md fixed top-0 z-50 w-full">
       <div className="navbar-start pl-4">
-        <img src={logo} alt="logo" className="h-12 w-52 cursor-pointer" onClick={() => navigate('/')} />
+        <img
+          src={logo}
+          alt="logo"
+          className="h-12 w-52 cursor-pointer"
+          onClick={() => navigate('/')}
+        />
       </div>
 
       {/* Mobile Hamburger Menu */}
@@ -26,7 +35,7 @@ const Navbar = ({ isAdminLoggedIn }) => {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -40,11 +49,48 @@ const Navbar = ({ isAdminLoggedIn }) => {
             </svg>
           </div>
           <ul className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-white rounded-box w-52">
-            <li><span className="menu-item cursor-pointer" onClick={() => navigate('/products')}>Products</span></li>
-            <li><span className="menu-item cursor-pointer" onClick={() => navigate('/solutions')}>Solutions</span></li>
-            <li><span className="menu-item cursor-pointer" onClick={() => navigate('/about')}>About</span></li>
-            <li><span className="menu-item cursor-pointer" onClick={() => navigate('/contact')}>Contact</span></li>
-            <li><span className="menu-item text-primary font-bold cursor-pointer" onClick={() => navigate('/login')}>Login</span></li>
+            <li>
+              <span className="menu-item cursor-pointer" onClick={() => navigate('/products')}>
+                Products
+              </span>
+            </li>
+            {isUserLoggedIn && (
+              <li>
+                <span
+                  className="menu-item cursor-pointer"
+                  onClick={() => navigate('/order-history')}
+                >
+                  Order History
+                </span>
+              </li>
+            )}
+            <li>
+              <span className="menu-item cursor-pointer" onClick={() => navigate('/about')}>
+                About
+              </span>
+            </li>
+            <li>
+              <span className="menu-item cursor-pointer" onClick={() => navigate('/contact')}>
+                Contact
+              </span>
+            </li>
+            <li>
+              {!isUserLoggedIn ? (
+                <span
+                  className="menu-item text-primary font-bold cursor-pointer"
+                  onClick={() => navigate('/login')}
+                >
+                  Login
+                </span>
+              ) : (
+                <span
+                  className="menu-item text-primary font-bold cursor-pointer"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </span>
+              )}
+            </li>
           </ul>
         </div>
       </div>
@@ -52,13 +98,56 @@ const Navbar = ({ isAdminLoggedIn }) => {
       {/* Full Navbar for Larger Screens */}
       <div className="navbar-end hidden lg:flex items-center">
         <ul className="menu menu-horizontal pr-4">
-          <li><span className="mx-1 text-neutral text-lg hover:text-white hover:bg-primary cursor-pointer" onClick={() => navigate('/products')}>Products</span></li>
-          <li><span className="mx-1 text-neutral text-lg hover:text-white hover:bg-primary cursor-pointer" onClick={() => navigate('/about')}>About</span></li>
-          <li><span className="mx-1 text-neutral text-lg hover:text-white hover:bg-primary cursor-pointer" onClick={() => navigate('/contact')}>Contact</span></li>
+          <li>
+            <span
+              className="mx-2 text-neutral text-lg hover:text-white hover:bg-primary cursor-pointer"
+              onClick={() => navigate('/products')}
+            >
+              Products
+            </span>
+          </li>
+          {isUserLoggedIn && (
+            <li>
+              <span
+                className="mx-2 text-neutral text-lg hover:text-white hover:bg-primary cursor-pointer"
+                onClick={() => navigate('/order-history')}
+              >
+                Order History
+              </span>
+            </li>
+          )}
+          <li>
+            <span
+              className="mx-2 text-neutral text-lg hover:text-white hover:bg-primary cursor-pointer"
+              onClick={() => navigate('/about')}
+            >
+              About
+            </span>
+          </li>
+          <li>
+            <span
+              className="mx-2 text-neutral text-lg hover:text-white hover:bg-primary cursor-pointer"
+              onClick={() => navigate('/contact')}
+            >
+              Contact
+            </span>
+          </li>
         </ul>
-        <button onClick={() => navigate('/login')} className="btn btn-primary text-white ml-4">
-          Login
-        </button>
+        {!isUserLoggedIn ? (
+          <button
+            onClick={() => navigate('/login')}
+            className="btn btn-primary text-white ml-4"
+          >
+            Login
+          </button>
+        ) : (
+          <button
+            onClick={handleLogout}
+            className="btn btn-primary text-white ml-4"
+          >
+            Logout
+          </button>
+        )}
       </div>
     </div>
   );

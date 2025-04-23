@@ -15,19 +15,15 @@ import AdminOrders from './components/AdminOrders';
 import AdminRevenue from './components/AdminRevenue';
 import AdminProfile from './components/AdminProfile.jsx';
 import AdminNavbar from './components/AdminNavbar';
+import OrderHistory from './components/OrderHistory';
 
 function App() {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
-  // Handle admin login
-  const handleAdminLogin = () => {
-    setIsAdminLoggedIn(true); // Set the admin logged-in state to true
-  };
-
-  // Handle admin logout
-  const handleAdminLogout = () => {
-    setIsAdminLoggedIn(false); // Set the admin logged-in state to false
-  };
+  const handleAdminLogin = () => setIsAdminLoggedIn(true);
+  const handleAdminLogout = () => setIsAdminLoggedIn(false);
+  const handleUserLogout = () => setIsUserLoggedIn(false);
 
   const isOnAdminRoute = window.location.pathname.startsWith('/admin');
 
@@ -35,20 +31,32 @@ function App() {
     <Router>
       {/* Conditionally render Navbar or AdminNavbar */}
       {isOnAdminRoute ? (
-        <AdminNavbar isAdminLoggedIn={isAdminLoggedIn} onAdminLogout={handleAdminLogout} />
-      ) : (
-        <Navbar isAdminLoggedIn={isAdminLoggedIn} />
-      )}
+  <AdminNavbar isAdminLoggedIn={isAdminLoggedIn} onAdminLogout={handleAdminLogout} />
+) : (
+  <Navbar
+    isAdminLoggedIn={isAdminLoggedIn}
+    isUserLoggedIn={isUserLoggedIn}
+    setIsUserLoggedIn={setIsUserLoggedIn}
+    onUserLogout={handleUserLogout}
+  />
+)}
+
 
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/products-list" element={<Products />} /> {/* Alias for Products */}
         <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login setIsUserLoggedIn={setIsUserLoggedIn} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+
+        {/* User-specific routes */}
+        {isUserLoggedIn && (
+          <Route path="/order-history" element={<OrderHistory />} />
+        )}
 
         {/* Admin login route */}
         <Route path="/admin" element={<AdminLogin onAdminLogin={handleAdminLogin} />} />
