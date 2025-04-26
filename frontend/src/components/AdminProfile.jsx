@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 
 const AdminProfile = () => {
     const [adminDetails] = useState({
-        name: 'Admin Name',
-        email: 'admin@example.com',
-        role: 'Administrator',
+        name: 'John Paul',
+        email: 'jphn@example.com',
+        role: 'Marketing Head',
+        description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Architecto, placeat!',
     });
 
     const [currentPassword, setCurrentPassword] = useState('');
@@ -23,23 +24,34 @@ const AdminProfile = () => {
     };
 
     return (
-        <div className="p-4">
-            <h2 className="text-3xl font-bold mb-6">Admin Profile</h2>
-
-            {/* Admin Details */}
-            <div className="mb-6 border border-gray-300 p-4 rounded">
-                <h3 className="text-lg font-bold mb-4">Profile Details</h3>
-                <p><strong>Name:</strong> {adminDetails.name}</p>
-                <p><strong>Email:</strong> {adminDetails.email}</p>
-                <p><strong>Role:</strong> {adminDetails.role}</p>
+        <div className="flex flex-col items-center min-h-screen bg-gray-100 p-4 sm:p-6 md:p-8 lg:p-12 space-y-6">
+            {/* Profile Card */}
+            <div className="max-w-[90%] sm:max-w-md w-full bg-white shadow-lg rounded-2xl p-6 text-center mx-auto">
+                <div className="relative">
+                    <img
+                        src="https://via.placeholder.com/150"
+                        alt="Profile"
+                        className="w-32 h-32 rounded-full mx-auto border-4 border-white shadow-md"
+                    />
+                </div>
+                <div className="mt-4">
+                    <h3 className="text-xl font-semibold">{adminDetails.name}</h3>
+                    <p className="text-gray-600 text-sm">{adminDetails.role}</p>
+                    <p className="text-gray-500 text-sm mt-2">{adminDetails.email}</p>
+                </div>
             </div>
 
-            {/* Change Password */}
-            <div className="border border-gray-300 p-4 rounded">
-                <h3 className="text-lg font-bold mb-4">Change Password</h3>
-                <form onSubmit={handlePasswordChange} className="space-y-4">
+            {/* Change Password Card */}
+            <div className="max-w-[90%] sm:max-w-md w-full bg-white shadow-lg rounded-2xl p-6 mx-auto">
+                <h3 className="text-lg font-bold mb-4 text-gray-700">Change Password</h3>
+                <form
+                    onSubmit={handlePasswordChange}
+                    className="space-y-4 text-left"
+                >
                     <div>
-                        <label className="block mb-2 text-sm font-medium">Current Password</label>
+                        <label className="block mb-2 text-sm font-medium text-gray-700">
+                            Current Password
+                        </label>
                         <input
                             type="password"
                             value={currentPassword}
@@ -49,7 +61,9 @@ const AdminProfile = () => {
                         />
                     </div>
                     <div>
-                        <label className="block mb-2 text-sm font-medium">New Password</label>
+                        <label className="block mb-2 text-sm font-medium text-gray-700">
+                            New Password
+                        </label>
                         <input
                             type="password"
                             value={newPassword}
@@ -59,7 +73,9 @@ const AdminProfile = () => {
                         />
                     </div>
                     <div>
-                        <label className="block mb-2 text-sm font-medium">Confirm New Password</label>
+                        <label className="block mb-2 text-sm font-medium text-gray-700">
+                            Confirm New Password
+                        </label>
                         <input
                             type="password"
                             value={confirmPassword}
@@ -70,7 +86,7 @@ const AdminProfile = () => {
                     </div>
                     <button
                         type="submit"
-                        className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+                        className="w-full bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
                     >
                         Change Password
                     </button>

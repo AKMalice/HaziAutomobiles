@@ -39,11 +39,12 @@ const AdminNavbar = ({ isAdminLoggedIn, onAdminLogout }) => {
                 {/* After-login Navbar */}
                 {isAdminLoggedIn && (
                     <div className="hidden lg:flex items-center space-x-4">
-                        {[['Dashboard', '/admin-dashboard'],
-                          ['Products', '/admin-dashboard/products'],
-                          ['Orders', '/admin-dashboard/orders'],
-                          ['Revenue', '/admin-dashboard/revenue'],
-                          ['Profile', '/admin-dashboard/profile'],
+                        {[
+                            ['Dashboard', '/admin-dashboard'],
+                            ['Products', '/admin-dashboard/products'],
+                            ['Orders', '/admin-dashboard/orders'],
+                            ['Revenue', '/admin-dashboard/revenue'],
+                            ['Profile', '/admin-dashboard/profile'],
                         ].map(([label, path]) => (
                             <Link
                                 key={label}
@@ -56,7 +57,7 @@ const AdminNavbar = ({ isAdminLoggedIn, onAdminLogout }) => {
 
                         <button
                             onClick={handleLogout}
-                            className="text-white text-lg font-semibold px-4 py-2 bg-red-600 rounded-md hover:bg-red-700 transition-colors"
+                            className="text-red-600 text-lg font-semibold px-4 py-2 border border-red-600 rounded-md hover:bg-red-600 hover:text-white transition-colors"
                         >
                             Logout
                         </button>

@@ -58,7 +58,7 @@ const Products = () => {
       <Navbar />
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 pt-24 pb-12">
+      <div className="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
         <h2 className="text-4xl font-bold text-center mb-8">Our Products</h2>
 
         {/* Search Bar */}
@@ -87,7 +87,7 @@ const Products = () => {
             filteredProducts.map((product) => (
               <div
                 key={product.id}
-                className="card bg-white hover:shadow-xl border border-primary transition-all duration-300"
+                className="bg-white hover:shadow-xl border border-gray-300 rounded-lg transition-all duration-300"
               >
                 <figure className="px-4 pt-4">
                   <img
@@ -96,13 +96,13 @@ const Products = () => {
                     className="rounded-xl w-full h-50 object-cover"
                   />
                 </figure>
-                <div className="card-body">
-                  <h3 className="card-title text-lg font-bold">{product.name}</h3>
+                <div className="p-4">
+                  <h3 className="text-lg font-bold">{product.name}</h3>
                   <p className="text-gray-600">{product.desc}</p>
-                  <p className="text-lg font-bold text-primary">{product.price}</p>
-                  <div className="card-actions justify-end mt-4">
+                  <p className="text-lg font-bold text-blue-600">{product.price}</p>
+                  <div className="mt-4">
                     <button
-                      className="btn btn-primary px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                      className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700"
                       onClick={() => navigate(`/product/${product.id}`)}
                     >
                       View Details

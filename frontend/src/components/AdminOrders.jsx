@@ -5,7 +5,6 @@ const AdminOrders = () => {
         { id: 1, orderId: 'ORD001', customer: 'John Doe', date: '2025-04-20', status: 'Shipped', amount: '$150', address: '123 Main St', contact: '123-456-7890' },
         { id: 2, orderId: 'ORD002', customer: 'Jane Smith', date: '2025-04-19', status: 'Processing', amount: '$250', address: '456 Elm St', contact: '987-654-3210' },
         { id: 3, orderId: 'ORD003', customer: 'Mike Brown', date: '2025-04-18', status: 'Completed', amount: '$350', address: '789 Oak St', contact: '555-123-4567' },
-        // Add more sample data as needed
     ];
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -27,7 +26,7 @@ const AdminOrders = () => {
         .slice((currentPage - 1) * ordersPerPage, currentPage * ordersPerPage);
 
     return (
-        <div className="p-4">
+        <div className="p-4 max-w-[90%] mx-auto">
             <h2 className="text-3xl font-bold mb-6">Admin Orders</h2>
 
             {selectedOrder ? (
@@ -39,7 +38,7 @@ const AdminOrders = () => {
                         Back to Orders
                     </button>
                     <h3 className="text-lg font-bold mb-4">Order Details</h3>
-                    <div className="border border-gray-300 p-4 rounded">
+                    <div className="border border-gray-300 p-4 rounded bg-white shadow-md">
                         <p><strong>Order ID:</strong> {selectedOrder.orderId}</p>
                         <p><strong>Customer:</strong> {selectedOrder.customer}</p>
                         <p><strong>Date:</strong> {selectedOrder.date}</p>

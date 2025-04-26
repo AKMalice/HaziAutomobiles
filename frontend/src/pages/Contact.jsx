@@ -13,7 +13,7 @@ const Contact = () => {
       <Navbar />
 
       {/* Content Section */}
-      <div className="max-w-7xl mx-auto px-4 pt-24 pb-12">
+      <div className="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
         <h2 className="text-4xl font-bold text-center mb-6">Contact Us</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -54,18 +54,15 @@ const Contact = () => {
           </div>
 
           {/* Google Map */}
-          <div className="bg-white shadow-lg rounded-lg p-6 h-[400px]">
-            <h3 className="text-2xl font-semibold text-gray-800 mb-4">Our Location</h3>
-            <div className="overflow-hidden rounded-lg">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.7911658165057!2d81.2596244!3d16.5045247!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a35fda8a7d1f015%3A0x0!2zMTbCsDMwJzE2LjMiTiA4McKwMTUnMzIuNyJF!5e0!3m2!1sen!2sin!4v1682448080843!5m2!1sen!2sin"
-                width="100%"
-                height="320"
-                allowFullScreen=""
-                loading="lazy"
-                className="border-none"
-              ></iframe>
-            </div>
+          <div className="bg-white shadow-lg rounded-lg h-[400px] overflow-hidden">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.7911658165057!2d81.2596244!3d16.5045247!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a35fda8a7d1f015%3A0x0!2zMTbCsDMwJzE2LjMiTiA4McKwMTUnMzIuNyJF!5e0!3m2!1sen!2sin!4v1682448080843!5m2!1sen!2sin"
+              width="100%"
+              height="100%"
+              allowFullScreen=""
+              loading="lazy"
+              className="border-none"
+            ></iframe>
           </div>
         </div>
       </div>

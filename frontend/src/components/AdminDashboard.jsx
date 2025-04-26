@@ -8,7 +8,7 @@ import {
     Tooltip,
     Legend,
     ResponsiveContainer,
-} from "recharts";
+} from 'recharts';
 
 const AdminDashboard = () => {
     const [reportType, setReportType] = useState('Monthly');
@@ -34,73 +34,81 @@ const AdminDashboard = () => {
     ];
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col bg-gray-50 min-h-screen">
+
             {/* Page Heading */}
-            <header className="">
+            <header className="p-4">
                 <h2 className="text-3xl font-bold">Admin Dashboard</h2>
             </header>
 
             {/* Main Content */}
-            <main className="p-4">
-                {/* Sales Report */}
-                <section className="mb-8">
-                    <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-xl font-bold">Sales Overview</h3>
-                        <div>
-                            <button
-                                className={`px-4 py-2 mr-2 ${reportType === 'Monthly' ? 'bg-indigo-600 text-white' : 'bg-gray-200'} rounded-md`}
-                                onClick={() => setReportType('Monthly')}
-                            >
-                                Monthly
-                            </button>
-                            <button
-                                className={`px-4 py-2 ${reportType === 'Yearly' ? 'bg-indigo-600 text-white' : 'bg-gray-200'} rounded-md`}
-                                onClick={() => setReportType('Yearly')}
-                            >
-                                Yearly
+            <main className="p-4 flex flex-col items-center">
+                <div className="max-w-[90%] w-full">
+                    {/* Sales Report */}
+                    <section className="mb-8">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-xl font-bold">Sales Overview</h3>
+                            <div>
+                                <button
+                                    className={`px-4 py-2 mr-2 ${reportType === 'Monthly' ? 'bg-indigo-600 text-white' : 'bg-gray-200'} rounded-md`}
+                                    onClick={() => setReportType('Monthly')}
+                                >
+                                    Monthly
+                                </button>
+                                <button
+                                    className={`px-4 py-2 ${reportType === 'Yearly' ? 'bg-indigo-600 text-white' : 'bg-gray-200'} rounded-md`}
+                                    onClick={() => setReportType('Yearly')}
+                                >
+                                    Yearly
+                                </button>
+                            </div>
+                        </div>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <LineChart data={reportType === 'Monthly' ? monthlyData : yearlyData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Line type="monotone" dataKey="Sales" stroke="#8884d8" activeDot={{ r: 8 }} />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </section>
+
+                    {/* Recent Orders */}
+                    <section>
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-xl font-bold">Recent Orders</h3>
+                            <button className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                                Download Revenue
                             </button>
                         </div>
-                    </div>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <LineChart data={reportType === 'Monthly' ? monthlyData : yearlyData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Line type="monotone" dataKey="Sales" stroke="#8884d8" activeDot={{ r: 8 }} />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </section>
-
-                {/* Recent Orders */}
-                <section>
-                    <h3 className="text-xl font-bold mb-4">Recent Orders</h3>
-                    <table className="table-auto w-full border-collapse border border-gray-300">
-                        <thead>
-                            <tr className="bg-gray-200">
-                                <th className="border border-gray-300 px-4 py-2">S.No</th>
-                                <th className="border border-gray-300 px-4 py-2">Order ID</th>
-                                <th className="border border-gray-300 px-4 py-2">Customer Name</th>
-                                <th className="border border-gray-300 px-4 py-2">Date Ordered</th>
-                                <th className="border border-gray-300 px-4 py-2">Status</th>
-                                <th className="border border-gray-300 px-4 py-2">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {orders.map((order) => (
-                                <tr key={order.id} className="text-center">
-                                    <td className="border border-gray-300 px-4 py-2">{order.id}</td>
-                                    <td className="border border-gray-300 px-4 py-2">{order.orderId}</td>
-                                    <td className="border border-gray-300 px-4 py-2">{order.customer}</td>
-                                    <td className="border border-gray-300 px-4 py-2">{order.date}</td>
-                                    <td className="border border-gray-300 px-4 py-2">{order.status}</td>
-                                    <td className="border border-gray-300 px-4 py-2">{order.amount}</td>
+                        <table className="table-auto w-full border-collapse border border-gray-300">
+                            <thead>
+                                <tr className="bg-gray-200">
+                                    <th className="border border-gray-300 px-4 py-2">S.No</th>
+                                    <th className="border border-gray-300 px-4 py-2">Order ID</th>
+                                    <th className="border border-gray-300 px-4 py-2">Customer Name</th>
+                                    <th className="border border-gray-300 px-4 py-2">Date Ordered</th>
+                                    <th className="border border-gray-300 px-4 py-2">Status</th>
+                                    <th className="border border-gray-300 px-4 py-2">Amount</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </section>
+                            </thead>
+                            <tbody>
+                                {orders.map((order) => (
+                                    <tr key={order.id} className="text-center">
+                                        <td className="border border-gray-300 px-4 py-2">{order.id}</td>
+                                        <td className="border border-gray-300 px-4 py-2">{order.orderId}</td>
+                                        <td className="border border-gray-300 px-4 py-2">{order.customer}</td>
+                                        <td className="border border-gray-300 px-4 py-2">{order.date}</td>
+                                        <td className="border border-gray-300 px-4 py-2">{order.status}</td>
+                                        <td className="border border-gray-300 px-4 py-2">{order.amount}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
             </main>
         </div>
     );

@@ -27,7 +27,7 @@ const AdminRevenue = () => {
     };
 
     return (
-        <div className="p-4">
+        <div className="p-4 sm:p-6 md:p-8 lg:p-12 max-w-[90%] mx-auto">
             <h2 className="text-3xl font-bold mb-6">Admin Revenue</h2>
 
             {/* Time Frame Selection */}

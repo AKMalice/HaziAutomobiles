@@ -8,7 +8,7 @@ const About = () => {
       <Navbar />
 
       {/* Content with padding to avoid navbar overlap */}
-      <div className="max-w-7xl mx-auto px-4 pt-24 pb-12">
+      <div className="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
         <h2 className="text-4xl font-bold text-center mb-6">About Us</h2>
         <p className="text-lg text-gray-600 text-center max-w-2xl mx-auto mb-8">
           Welcome to Hazi Automobiles, a leading manufacturer of precision-engineered 

@@ -9,7 +9,7 @@ const OrderHistory = () => {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] pt-24">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center mb-6">Order History</h2>
         <div className="bg-white shadow-lg rounded-lg p-6">
           <table className="table-auto w-full">
