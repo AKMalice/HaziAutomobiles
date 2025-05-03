@@ -15,7 +15,7 @@ const Home = () => {
 
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-white pt-16">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
             <div className="space-y-8 py-20">
               <h1 className="text-5xl lg:text-6xl font-bold leading-tight text-neutral">
@@ -34,7 +34,7 @@ const Home = () => {
               <img 
                 src={img}
                 alt="Excavator" 
-                className="absolute rounded-lg shadow-2xl object-cover"
+                className="absolute rounded-lg shadow-2xl object-cover w-full h-full"
               />
             </div>
           </div>
@@ -43,15 +43,15 @@ const Home = () => {
 
       {/* Why Choose Us */}
       <div className="py-20 bg-neutral text-neutral-content">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-3xl font-bold mb-4">Why Choose Hazi Automobiles?</h2>
             <p className="opacity-90">Delivering excellence through innovation and precision engineering</p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { title: "Expert Team", value: "50+", desc: "Skilled professionals" }              ,
+            {[ 
+              { title: "Expert Team", value: "50+", desc: "Skilled professionals" },
               { title: "Experience", value: "15+", desc: "Years in industry" },
               { title: "Production", value: "1000+", desc: "Parts per year" }
             ].map((stat, idx) => (
@@ -67,36 +67,36 @@ const Home = () => {
 
       {/* Featured Products */}
       <div className="py-8 bg-base-100">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-8">
             <h2 className="text-4xl font-bold mb-4">Featured Products</h2>
             <p className="text-gray-600">Discover our range of high-performance parts engineered for reliability</p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            {[
+            {[ 
               {
                 name: "Excavator Pins",
                 desc: "High-strength alloy steel pins designed for maximum durability",
                 specs: ["Heat treated", "Custom sizes"],
-                img : p1
+                img: p1
               },
               {
                 name: "Dozer Bushings",
                 desc: "Premium quality bushings engineered for optimal performance",
                 specs: ["Wear resistant", "Extended life"],
-                img : p2
+                img: p2
               },
               {
                 name: "Custom Parts",
                 desc: "Specialized components tailored to your exact specifications",
                 specs: ["Custom design", "Fast delivery"],
-                img : p3
+                img: p3
               }
             ].map((product, idx) => (
               <div key={idx} className="card bg-white hover:shadow-xl border border-primary transition-all duration-300">
                 <figure className="px-4 pt-4">
-                  <img src={product.img} alt={product.name} className="rounded-xl w-full object-fit h-50 w-64" />
+                  <img src={product.img} alt={product.name} className="rounded-xl w-full h-64 object-cover" />
                 </figure>
                 <div className="card-body">
                   <h3 className="card-title">{product.name}</h3>
@@ -118,15 +118,13 @@ const Home = () => {
         </div>
       </div>
 
-
-
       {/* Footer */}
       <footer className="bg-neutral text-neutral-content">
-          <div className="footer py-6">
-            <div className="mx-auto">
+        <div className="footer py-6">
+          <div className="mx-auto">
             <p>© {new Date().getFullYear()} Hazi Automobiles. All rights reserved.</p>
-            </div> 
-          </div>
+          </div> 
+        </div>
       </footer>
     </div>
   );

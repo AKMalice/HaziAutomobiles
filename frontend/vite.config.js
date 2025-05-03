@@ -11,8 +11,11 @@ export default defineConfig({
       plugins: [tailwindcss(), autoprefixer()],
     },
   },
+  server: {
+    port: 5600,
+  },
   build: {
     outDir: 'build',
     assetsDir: 'static',
   },
-})
+});
