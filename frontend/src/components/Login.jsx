@@ -1,16 +1,90 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { notification } from 'antd';
+import api from '../utils/api';
 
-const Login = ({ setIsUserLoggedIn }) => {
+const Login = (props) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  useEffect(() => {
+    // Check if there's a stored notification from a redirect
+    const storedNotification = localStorage.getItem('notification');
+    if (storedNotification) {
+      try {
+        const { message, description } = JSON.parse(storedNotification);
+        notification.error({
+          message,
+          description,
+          duration: 5,
+        });
+        localStorage.removeItem('notification');
+      } catch (error) {
+        console.error('Error parsing notification:', error);
+        localStorage.removeItem('notification');
+      }
+    }
+
+    // Check if user is already logged in
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      // Redirect based on role
+      const role = localStorage.getItem('userRole');
+      if (role === 'admin') {
+        navigate('/admin-dashboard');
+      } else {
+        navigate('/products-list');
+      }
+    }
+  }, [navigate]);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Simulate successful login
-    setIsUserLoggedIn(true); // Set logged-in state
-    navigate('/products-list'); // Redirect to products-list page after login
+    setIsLoading(true);
+
+    try {
+      const response = await api.post('/login/', {
+        email,
+        password
+      });
+
+      const { token, role } = response.data;
+      
+      // Store token and role in localStorage
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('userRole', role);
+      
+      // The API utility will automatically add the token to future requests
+      
+      // Show success notification
+      notification.success({
+        message: 'Login Successful',
+        description: `Welcome back!`,
+        duration: 3,
+      });
+      
+      // Update authentication state in App.jsx
+      if (props.onLoginSuccess) {
+        props.onLoginSuccess(role);
+      }
+      // Redirect based on role
+      if (role === 'admin') {
+        navigate('/admin-dashboard');
+      } else {
+        navigate('/products-list');
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || 'Login failed. Please try again.';
+      notification.error({
+        message: 'Login Failed',
+        description: errorMessage,
+        duration: 5,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };  
 
   return (
@@ -28,6 +102,7 @@ const Login = ({ setIsUserLoggedIn }) => {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={isLoading}
             />
           </div>
 
@@ -40,10 +115,17 @@ const Login = ({ setIsUserLoggedIn }) => {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={isLoading}
             />
           </div>
 
-          <button type="submit" className="btn btn-primary w-full">Login</button>
+          <button 
+            type="submit" 
+            className="btn btn-primary w-full"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Logging in...' : 'Login'}
+          </button>
         </form>
 
         {/* Link to Register Page */}

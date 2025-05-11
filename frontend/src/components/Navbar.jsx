@@ -1,17 +1,35 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { notification } from 'antd';
 import logo from '../assets/logo.png';
 
-const Navbar = ({ isAdminLoggedIn, isUserLoggedIn, setIsUserLoggedIn }) => {
+const Navbar = ({ isLoggedIn = false, userRole = null }) => {
+  // Check localStorage directly for more reliable auth state
+  const authToken = localStorage.getItem('authToken');
+  const storedUserRole = localStorage.getItem('userRole');
+  const isAuthenticated = !!authToken; // Convert to boolean
+  
   const navigate = useNavigate();
 
-  if (isAdminLoggedIn) {
+  // Don't render navbar on admin routes
+  if (userRole === 'admin' || storedUserRole === 'admin') {
     return null;
   }
 
   const handleLogout = () => {
-    setIsUserLoggedIn(false);
-    navigate('/login');
+    // Clear authentication data
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userRole');
+    
+    // Show success notification
+    notification.success({
+      message: 'Logged Out',
+      description: 'You have been successfully logged out.',
+      duration: 3,
+    });
+    
+    // Redirect to home page
+    navigate('/');
   };
 
   return (
@@ -54,7 +72,7 @@ const Navbar = ({ isAdminLoggedIn, isUserLoggedIn, setIsUserLoggedIn }) => {
                 Products
               </span>
             </li>
-            {isUserLoggedIn && (
+            {isAuthenticated && (
               <li>
                 <span
                   className="menu-item cursor-pointer"
@@ -75,7 +93,7 @@ const Navbar = ({ isAdminLoggedIn, isUserLoggedIn, setIsUserLoggedIn }) => {
               </span>
             </li>
             <li>
-              {!isUserLoggedIn ? (
+              {!isAuthenticated ? (
                 <span
                   className="menu-item text-primary font-bold cursor-pointer"
                   onClick={() => navigate('/login')}
@@ -106,7 +124,7 @@ const Navbar = ({ isAdminLoggedIn, isUserLoggedIn, setIsUserLoggedIn }) => {
               Products
             </span>
           </li>
-          {isUserLoggedIn && (
+          {isAuthenticated && (
             <li>
               <span
                 className="mx-2 text-neutral text-lg hover:text-white hover:bg-primary cursor-pointer"
@@ -133,7 +151,7 @@ const Navbar = ({ isAdminLoggedIn, isUserLoggedIn, setIsUserLoggedIn }) => {
             </span>
           </li>
         </ul>
-        {!isUserLoggedIn ? (
+        {!isAuthenticated ? (
           <button
             onClick={() => navigate('/login')}
             className="btn btn-primary text-white ml-4"
