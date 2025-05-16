@@ -1,57 +1,54 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { CartContext } from '../App';
 
 const CartItems = () => {
   const { cartItems, setCartItems } = useContext(CartContext);
-  const [items, setItems] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (cartItems && cartItems.length > 0) {
-      setItems(cartItems);
-    } else {
+    if (!cartItems || cartItems.length === 0) {
       const stored = localStorage.getItem('cartItems');
       if (stored) {
-        setItems(JSON.parse(stored));
+        setCartItems(JSON.parse(stored));
       }
     }
-  }, [cartItems]);
+  }, []);
 
   const handleQuantityChange = (id, size, newQuantity) => {
-    if (newQuantity < 1) return; // prevent 0 or negative quantities
-    const updated = items.map(item =>
-      item.id === id && item.size === size ? { ...item, quantity: newQuantity } : item
+    if (newQuantity < 1) return;
+    const updated = cartItems.map(item =>
+      item.id === id && item.size === size
+        ? { ...item, quantity: newQuantity }
+        : item
     );
-    setItems(updated);
     setCartItems(updated);
     localStorage.setItem('cartItems', JSON.stringify(updated));
   };
 
   const handleRemoveItem = (id, size) => {
-    const updated = items.filter(item => !(item.id === id && item.size === size));
-    setItems(updated);
+    const updated = cartItems.filter(item => !(item.id === id && item.size === size));
     setCartItems(updated);
     localStorage.setItem('cartItems', JSON.stringify(updated));
   };
 
-  const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const totalPrice = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   const handleCheckout = () => {
     navigate('/checkout');
   };
 
-  if (items.length === 0) {
+  if (!cartItems || cartItems.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Navbar />
-        <main className="container mx-auto px-4 py-10 flex flex-col items-center justify-center">
+        <main className="container mx-auto px-4 py-10 pt-16 flex flex-col items-center justify-center">
           <h2 className="text-3xl font-bold mb-6">Your Cart is Empty</h2>
-          <Link
-            to="/products"
-            className="text-blue-600 font-semibold hover:underline"
-          >
+          <Link to="/products" className="text-blue-600 font-semibold hover:underline">
             Browse Products
           </Link>
         </main>
@@ -63,11 +60,11 @@ const CartItems = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
-      <main className="container mx-auto px-4 py-10">
+      <main className="container mx-auto px-4 py-10 pt-16">
         <h2 className="text-3xl font-bold mb-8">Your Cart Items</h2>
 
         <div className="space-y-6">
-          {items.map((item) => (
+          {cartItems.map(item => (
             <div
               key={`${item.id}-${item.size}`}
               className="bg-white rounded-2xl shadow-md p-6 flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6"
@@ -87,7 +84,10 @@ const CartItems = () => {
               </div>
 
               <div className="flex items-center space-x-2">
-                <label htmlFor={`quantity-${item.id}-${item.size}`} className="sr-only">
+                <label
+                  htmlFor={`quantity-${item.id}-${item.size}`}
+                  className="sr-only"
+                >
                   Quantity
                 </label>
                 <input
@@ -95,7 +95,7 @@ const CartItems = () => {
                   type="number"
                   min={1}
                   value={item.quantity}
-                  onChange={(e) =>
+                  onChange={e =>
                     handleQuantityChange(item.id, item.size, parseInt(e.target.value, 10))
                   }
                   className="w-16 p-2 border rounded-lg text-center"

@@ -19,7 +19,7 @@ const Cart = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
-      <main className="container mx-auto px-6 py-10">
+      <main className="container mx-auto px-6 py-10 pt-16">
         <h2 className="text-3xl font-bold mb-8">Your Cart</h2>
 
         {buyNowItem ? (

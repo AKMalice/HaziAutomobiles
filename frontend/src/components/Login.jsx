@@ -10,7 +10,6 @@ const Login = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Check if there's a stored notification from a redirect
     const storedNotification = localStorage.getItem('notification');
     if (storedNotification) {
       try {

@@ -22,7 +22,6 @@ const Profile = () => {
 
   const handleSave = (e) => {
     e.preventDefault();
-    // Save logic here (e.g., update backend or state)
     setEditing(false);
     alert("Profile updated successfully!");
   };

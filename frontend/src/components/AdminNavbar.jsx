@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { notification } from 'antd';
-import logo from '../assets/logo.png'; // Adjust path if necessary
+import logo from '../assets/logo.png';
 
 const AdminNavbar = ({ isLoggedIn }) => {
     const navigate = useNavigate();

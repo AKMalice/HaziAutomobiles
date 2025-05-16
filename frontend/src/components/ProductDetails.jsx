@@ -4,9 +4,9 @@ import Navbar from '../components/Navbar';
 import p1 from '../assets/p1.jpg';
 import p2 from '../assets/p2.jpg';
 import p3 from '../assets/p3.jpg';
-import api from '../utils/api'; // Axios instance for API calls
-import { CartContext } from '../App'; // Import CartContext from your app
-import { notification } from 'antd';  // <-- Import notification
+import api from '../utils/api';
+import { CartContext } from '../App';
+import { notification } from 'antd';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -49,11 +49,14 @@ const ProductDetails = () => {
 
   const product = products.find(item => item.id === parseInt(id, 10));
 
+  // Reset selectedSize whenever product or id changes
   useEffect(() => {
     if (product?.sizes?.length > 0) {
       setSelectedSize(product.sizes[0]);
+    } else {
+      setSelectedSize('');
     }
-  }, [product]);
+  }, [product, id]);
 
   const syncCartWithBackend = async (cart) => {
     try {
@@ -94,7 +97,6 @@ const ProductDetails = () => {
     localStorage.setItem('cartItems', JSON.stringify(updatedCart));
     syncCartWithBackend(updatedCart);
 
-    // Show success notification
     notification.success({
       message: 'Added to Cart',
       description: `${product.name} (${selectedSize}) has been added to your cart.`,
@@ -143,19 +145,19 @@ const ProductDetails = () => {
             <img
               src={product.images[0]}
               alt={product.name}
-              className="w-full h-80 object-cover rounded-lg"
+              className="w-full max-w-md h-80 object-cover rounded-lg"
             />
           </div>
           <div className="space-y-6">
             <h2 className="text-3xl font-bold">{product.name}</h2>
             <p className="text-gray-700">{product.desc}</p>
-            {product.sizes && (
+            {product.sizes && product.sizes.length > 0 && (
               <div>
                 <h3 className="text-lg font-semibold">Size:</h3>
                 <select
                   value={selectedSize}
                   onChange={(e) => setSelectedSize(e.target.value)}
-                  className="mt-2 p-2 border rounded-lg w-full md:w-1/2"
+                  className="mt-2 p-2 border border-gray-300 rounded-lg w-full md:w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   {product.sizes.map((size, index) => (
                     <option key={index} value={size}>
