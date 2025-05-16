@@ -1,34 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import { notification } from 'antd';
 import logo from '../assets/logo.png';
 
 const Navbar = ({ isLoggedIn = false, userRole = null }) => {
-  // Check localStorage directly for more reliable auth state
   const authToken = localStorage.getItem('authToken');
   const storedUserRole = localStorage.getItem('userRole');
-  const isAuthenticated = !!authToken; // Convert to boolean
+  const isAuthenticated = !!authToken;
   
   const navigate = useNavigate();
 
-  // Don't render navbar on admin routes
+  const [cartCount, setCartCount] = useState(0);
+
+  // On component mount, set cart count based on distinct cart items count
+  useEffect(() => {
+    const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const count = cart.length;  // Count distinct items, not total quantity
+    setCartCount(count);
+  }, []);
+
+  // Listen for localStorage changes to update cart count across tabs/windows
+  useEffect(() => {
+    const onStorageChange = () => {
+      const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+      const count = cart.length;  // Count distinct items
+      setCartCount(count);
+    };
+    window.addEventListener('storage', onStorageChange);
+    return () => window.removeEventListener('storage', onStorageChange);
+  }, []);
+
+  // Hide navbar for admin users
   if (userRole === 'admin' || storedUserRole === 'admin') {
     return null;
   }
 
   const handleLogout = () => {
-    // Clear authentication data
     localStorage.removeItem('authToken');
     localStorage.removeItem('userRole');
-    
-    // Show success notification
     notification.success({
       message: 'Logged Out',
       description: 'You have been successfully logged out.',
       duration: 3,
     });
-    
-    // Redirect to home page
     navigate('/');
   };
 
@@ -109,6 +123,28 @@ const Navbar = ({ isLoggedIn = false, userRole = null }) => {
                 </span>
               )}
             </li>
+            {isAuthenticated && (
+              <li>
+                <span
+                  className="menu-item cursor-pointer flex items-center space-x-1"
+                  onClick={() => window.open('http://127.0.0.1:8000/cart-items', '_blank')}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-primary"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4" />
+                    <circle cx="7" cy="21" r="2" />
+                    <circle cx="17" cy="21" r="2" />
+                  </svg>
+                  <span className="badge badge-primary text-white">{cartCount}</span>
+                </span>
+              </li>
+            )}
           </ul>
         </div>
       </div>
@@ -151,6 +187,33 @@ const Navbar = ({ isLoggedIn = false, userRole = null }) => {
             </span>
           </li>
         </ul>
+
+        {isAuthenticated && (
+          <div
+            className="cursor-pointer relative mx-2"
+            onClick={() => navigate('/cart-items')}
+            title="View Cart"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 text-primary hover:text-primary-dark"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4" />
+              <circle cx="7" cy="21" r="2" />
+              <circle cx="17" cy="21" r="2" />
+            </svg>
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-600 rounded-full text-xs w-5 h-5 flex items-center justify-center text-white font-bold">
+                {cartCount}
+              </span>
+            )}
+          </div>
+        )}
+
         {!isAuthenticated ? (
           <button
             onClick={() => navigate('/login')}

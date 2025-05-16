@@ -35,7 +35,7 @@ const Login = (props) => {
       if (role === 'admin') {
         navigate('/admin-dashboard');
       } else {
-        navigate('/products-list');
+        navigate('/products');
       }
     }
   }, [navigate]);
@@ -73,7 +73,7 @@ const Login = (props) => {
       if (role === 'admin') {
         navigate('/admin-dashboard');
       } else {
-        navigate('/products-list');
+        navigate('/products');
       }
     } catch (error) {
       const errorMessage = error.response?.data?.error || 'Login failed. Please try again.';
