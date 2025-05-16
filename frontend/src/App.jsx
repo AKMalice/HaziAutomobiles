@@ -9,6 +9,7 @@ import Contact from './pages/Contact';
 import Register from './components/Register';
 import ProductDetails from './components/ProductDetails';
 import Cart from './components/Cart';
+import CartItems from './components/CartItems.jsx';
 import AdminDashboard from './components/AdminDashboard';
 import AdminProducts from './components/AdminProducts';
 import AdminOrders from './components/AdminOrders';
@@ -69,6 +70,7 @@ function AppContent() {
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/cart-items" element={<CartItems />} />
         <Route path="/login" element={<Login onLoginSuccess={onLoginSuccess} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/about" element={<About />} />

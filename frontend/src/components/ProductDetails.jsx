@@ -6,6 +6,7 @@ import p2 from '../assets/p2.jpg';
 import p3 from '../assets/p3.jpg';
 import api from '../utils/api'; // Axios instance for API calls
 import { CartContext } from '../App'; // Import CartContext from your app
+import { notification } from 'antd';  // <-- Import notification
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -92,6 +93,13 @@ const ProductDetails = () => {
     setCartItems(updatedCart);
     localStorage.setItem('cartItems', JSON.stringify(updatedCart));
     syncCartWithBackend(updatedCart);
+
+    // Show success notification
+    notification.success({
+      message: 'Added to Cart',
+      description: `${product.name} (${selectedSize}) has been added to your cart.`,
+      duration: 2,
+    });
   };
 
   const handleBuyNow = () => {
@@ -100,7 +108,6 @@ const ProductDetails = () => {
       return;
     }
 
-    // Prepare buyNowItem object
     const buyNowItem = {
       id: product.id,
       name: product.name,
@@ -110,10 +117,6 @@ const ProductDetails = () => {
       image: product.images[0],
     };
 
-    // Save buyNowItem to localStorage for Cart page
-    localStorage.setItem('buyNowItem', JSON.stringify(buyNowItem));
-
-    // Optionally update the cart context as well (if you want)
     setCartItems([buyNowItem]);
     localStorage.setItem('cartItems', JSON.stringify([buyNowItem]));
     syncCartWithBackend([buyNowItem]);
@@ -167,19 +170,20 @@ const ProductDetails = () => {
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
               <button
                 onClick={handleAddToCart}
-                className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700"
+                className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
               >
                 Add to Cart
               </button>
               <button
                 onClick={handleBuyNow}
-                className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700"
+                className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
               >
                 Buy Now
               </button>
             </div>
           </div>
         </div>
+
         <div className="mt-12">
           <h3 className="text-2xl font-semibold mb-6">Related Products</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

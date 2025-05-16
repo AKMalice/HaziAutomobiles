@@ -1,97 +1,127 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import api from '../utils/api'; // Axios instance
-import { useNavigate } from 'react-router-dom';
+import { CartContext } from '../App';
 
 const CartItems = () => {
-  const [cartItems, setCartItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { cartItems, setCartItems } = useContext(CartContext);
+  const [items, setItems] = useState([]);
   const navigate = useNavigate();
 
-  // Fetch cart items from backend and fallback to localStorage if API fails
   useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        const response = await api.get('http://127.0.0.1:8000/cart-items');
-        setCartItems(response.data.items || []);
-      } catch (error) {
-        console.error('Failed to fetch cart items from backend, falling back to localStorage');
-        const savedCart = JSON.parse(localStorage.getItem('cartItems')) || [];
-        setCartItems(savedCart);
-      } finally {
-        setLoading(false);
+    if (cartItems && cartItems.length > 0) {
+      setItems(cartItems);
+    } else {
+      const stored = localStorage.getItem('cartItems');
+      if (stored) {
+        setItems(JSON.parse(stored));
       }
-    };
+    }
+  }, [cartItems]);
 
-    fetchCartItems();
-  }, []);
-
-  const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex justify-center items-center">
-        <p className="text-xl font-semibold">Loading cart items...</p>
-      </div>
+  const handleQuantityChange = (id, size, newQuantity) => {
+    if (newQuantity < 1) return; // prevent 0 or negative quantities
+    const updated = items.map(item =>
+      item.id === id && item.size === size ? { ...item, quantity: newQuantity } : item
     );
-  }
+    setItems(updated);
+    setCartItems(updated);
+    localStorage.setItem('cartItems', JSON.stringify(updated));
+  };
 
-  if (cartItems.length === 0) {
+  const handleRemoveItem = (id, size) => {
+    const updated = items.filter(item => !(item.id === id && item.size === size));
+    setItems(updated);
+    setCartItems(updated);
+    localStorage.setItem('cartItems', JSON.stringify(updated));
+  };
+
+  const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  const handleCheckout = () => {
+    navigate('/checkout');
+  };
+
+  if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-[#f8fafc]">
+      <div className="min-h-screen bg-gray-50">
         <Navbar />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
+        <main className="container mx-auto px-4 py-10 flex flex-col items-center justify-center">
           <h2 className="text-3xl font-bold mb-6">Your Cart is Empty</h2>
-          <button
-            onClick={() => navigate('/products')}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          <Link
+            to="/products"
+            className="text-blue-600 font-semibold hover:underline"
           >
             Browse Products
-          </button>
-        </div>
+          </Link>
+        </main>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc]">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
-        <h2 className="text-3xl font-bold mb-6">Your Cart</h2>
+
+      <main className="container mx-auto px-4 py-10">
+        <h2 className="text-3xl font-bold mb-8">Your Cart Items</h2>
+
         <div className="space-y-6">
-          {cartItems.map(({ id, name, price, quantity, size, image }, index) => (
+          {items.map((item) => (
             <div
-              key={`${id}-${size}-${index}`}
-              className="flex flex-col sm:flex-row items-center bg-white rounded-lg p-4 shadow"
+              key={`${item.id}-${item.size}`}
+              className="bg-white rounded-2xl shadow-md p-6 flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6"
             >
-              <img
-                src={image}
-                alt={name}
-                className="w-32 h-24 object-cover rounded-md mb-4 sm:mb-0 sm:mr-6"
-              />
-              <div className="flex-grow">
-                <h3 className="text-xl font-semibold">{name}</h3>
-                <p className="text-gray-600">Size: {size}</p>
-                <p className="text-blue-600 font-bold text-lg">${price.toFixed(2)}</p>
-                <p className="text-gray-700">Quantity: {quantity}</p>
-                <p className="font-semibold">
-                  Total: ${(price * quantity).toFixed(2)}
-                </p>
+              <div className="flex-shrink-0">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-24 h-24 object-cover rounded-lg"
+                />
+              </div>
+
+              <div className="flex-grow space-y-1">
+                <h3 className="text-lg font-bold text-black">{item.name}</h3>
+                <p className="text-gray-600">Size: {item.size}</p>
+                <p className="text-blue-600 font-bold">${item.price.toFixed(2)}</p>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <label htmlFor={`quantity-${item.id}-${item.size}`} className="sr-only">
+                  Quantity
+                </label>
+                <input
+                  id={`quantity-${item.id}-${item.size}`}
+                  type="number"
+                  min={1}
+                  value={item.quantity}
+                  onChange={(e) =>
+                    handleQuantityChange(item.id, item.size, parseInt(e.target.value, 10))
+                  }
+                  className="w-16 p-2 border rounded-lg text-center"
+                />
+                <button
+                  onClick={() => handleRemoveItem(item.id, item.size)}
+                  className="text-red-600 hover:text-red-800 font-semibold"
+                  aria-label="Remove item"
+                >
+                  Remove
+                </button>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="mt-8 flex justify-between items-center">
-          <p className="text-2xl font-bold">Total: ${totalPrice.toFixed(2)}</p>
+        <div className="mt-8 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+          <p className="text-xl font-semibold">Total: ${totalPrice.toFixed(2)}</p>
           <button
-            onClick={() => navigate('/checkout')}
-            className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700"
+            onClick={handleCheckout}
+            className="w-full md:w-auto bg-blue-600 text-white py-3 px-8 rounded-lg text-lg font-semibold hover:bg-blue-700"
           >
             Go to Checkout
           </button>
         </div>
-      </div>
+      </main>
     </div>
   );
 };

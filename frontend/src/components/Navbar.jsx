@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState, useContext } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import { notification } from 'antd';
 import logo from '../assets/logo.png';
+import { CartContext } from '../App';  // Import CartContext to sync cart count immediately
 
 const Navbar = ({ isLoggedIn = false, userRole = null }) => {
   const authToken = localStorage.getItem('authToken');
@@ -10,27 +11,33 @@ const Navbar = ({ isLoggedIn = false, userRole = null }) => {
   
   const navigate = useNavigate();
 
+  const { cartItems } = useContext(CartContext);  // Get cartItems from context
+
   const [cartCount, setCartCount] = useState(0);
 
-  // On component mount, set cart count based on distinct cart items count
+  // Initialize cart count on mount
   useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-    const count = cart.length;  // Count distinct items, not total quantity
-    setCartCount(count);
+    const initialCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    setCartCount(initialCount);
   }, []);
 
-  // Listen for localStorage changes to update cart count across tabs/windows
+  // Update cart count whenever cartItems change
+  useEffect(() => {
+    const count = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    setCartCount(count);
+  }, [cartItems]);
+
+  // Sync across tabs/windows via localStorage change
   useEffect(() => {
     const onStorageChange = () => {
-      const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-      const count = cart.length;  // Count distinct items
+      const storedCart = JSON.parse(localStorage.getItem('cartItems')) || [];
+      const count = storedCart.reduce((sum, item) => sum + item.quantity, 0);
       setCartCount(count);
     };
     window.addEventListener('storage', onStorageChange);
     return () => window.removeEventListener('storage', onStorageChange);
   }, []);
 
-  // Hide navbar for admin users
   if (userRole === 'admin' || storedUserRole === 'admin') {
     return null;
   }
@@ -128,6 +135,7 @@ const Navbar = ({ isLoggedIn = false, userRole = null }) => {
                 <span
                   className="menu-item cursor-pointer flex items-center space-x-1"
                   onClick={() => window.open('http://127.0.0.1:8000/cart-items', '_blank')}
+                  title="View Cart"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -141,7 +149,9 @@ const Navbar = ({ isLoggedIn = false, userRole = null }) => {
                     <circle cx="7" cy="21" r="2" />
                     <circle cx="17" cy="21" r="2" />
                   </svg>
-                  <span className="badge badge-primary text-white">{cartCount}</span>
+                  <span className="badge badge-primary text-white text-xs px-1.5 py-0.5 rounded-full leading-none">
+                    {cartCount}
+                  </span>
                 </span>
               </li>
             )}
@@ -207,7 +217,7 @@ const Navbar = ({ isLoggedIn = false, userRole = null }) => {
               <circle cx="17" cy="21" r="2" />
             </svg>
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-600 rounded-full text-xs w-5 h-5 flex items-center justify-center text-white font-bold">
+              <span className="absolute -top-1 -right-2 badge badge-primary text-white text-xs px-1.5 py-0.5 rounded-full leading-none">
                 {cartCount}
               </span>
             )}
@@ -216,15 +226,15 @@ const Navbar = ({ isLoggedIn = false, userRole = null }) => {
 
         {!isAuthenticated ? (
           <button
+            className="btn btn-primary ml-4"
             onClick={() => navigate('/login')}
-            className="btn btn-primary text-white ml-4"
           >
             Login
           </button>
         ) : (
           <button
+            className="btn btn-primary ml-4"
             onClick={handleLogout}
-            className="btn btn-primary text-white ml-4"
           >
             Logout
           </button>
