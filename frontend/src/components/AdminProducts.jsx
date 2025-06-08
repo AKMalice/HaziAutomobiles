@@ -166,7 +166,7 @@ const AdminProducts = () => {
                                         onClick={() =>
                                             setEditingProduct(product)
                                         }
-                                        className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700"
+                                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
                                     >
                                         Edit
                                     </button>
