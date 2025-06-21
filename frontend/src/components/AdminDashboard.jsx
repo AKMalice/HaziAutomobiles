@@ -79,9 +79,6 @@ const AdminDashboard = () => {
                     <section>
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-xl font-bold">Recent Orders</h3>
-                            <button className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-                                Download Revenue
-                            </button>
                         </div>
                         <table className="table-auto w-full border-collapse border border-gray-300">
                             <thead>

@@ -14,6 +14,7 @@ import AdminDashboard from './components/AdminDashboard';
 import AdminProducts from './components/AdminProducts';
 import AdminOrders from './components/AdminOrders';
 import AdminRevenue from './components/AdminRevenue';
+import AdminEmployees from './components/AdminEmployees';
 import AdminProfile from './components/AdminProfile.jsx';
 import AdminNavbar from './components/AdminNavbar';
 import OrderHistory from './components/OrderHistory';
@@ -82,6 +83,10 @@ function AppContent() {
         <Route
           path="/admin-dashboard"
           element={isLoggedIn && userRole === 'admin' ? <AdminDashboard /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/admin-dashboard/employees"
+          element={isLoggedIn && userRole === 'admin' ? <AdminEmployees /> : <Navigate to="/login" replace />}
         />
         <Route
           path="/admin-dashboard/products"

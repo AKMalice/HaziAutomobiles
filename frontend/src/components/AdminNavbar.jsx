@@ -49,6 +49,7 @@ const AdminNavbar = ({ isLoggedIn }) => {
                         ['Products', '/admin-dashboard/products'],
                         ['Orders', '/admin-dashboard/orders'],
                         ['Revenue', '/admin-dashboard/revenue'],
+                        ['Employees', '/admin-dashboard/employees'],   
                         ['Profile', '/admin-dashboard/profile'],
                     ].map(([label, path]) => (
                         <Link
