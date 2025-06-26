@@ -16,13 +16,14 @@ const CartItems = () => {
     }
   }, []);
 
-  const handleQuantityChange = (id, size, newQuantity) => {
-    if (newQuantity < 1) return;
-    const updated = cartItems.map(item =>
-      item.id === id && item.size === size
-        ? { ...item, quantity: newQuantity }
-        : item
-    );
+  const handleQuantityChange = (id, size, type) => {
+    const updated = cartItems.map(item => {
+      if (item.id === id && item.size === size) {
+        const newQuantity = type === 'increase' ? item.quantity + 1 : item.quantity - 1;
+        return { ...item, quantity: Math.max(newQuantity, 1) }; // Ensure quantity is at least 1
+      }
+      return item;
+    });
     setCartItems(updated);
     localStorage.setItem('cartItems', JSON.stringify(updated));
   };
@@ -84,22 +85,20 @@ const CartItems = () => {
               </div>
 
               <div className="flex items-center space-x-2">
-                <label
-                  htmlFor={`quantity-${item.id}-${item.size}`}
-                  className="sr-only"
+                {/* Quantity Controls */}
+                <button
+                  onClick={() => handleQuantityChange(item.id, item.size, 'decrease')}
+                  className="px-3 py-1 bg-gray-200 rounded-lg text-lg hover:bg-gray-300"
                 >
-                  Quantity
-                </label>
-                <input
-                  id={`quantity-${item.id}-${item.size}`}
-                  type="number"
-                  min={1}
-                  value={item.quantity}
-                  onChange={e =>
-                    handleQuantityChange(item.id, item.size, parseInt(e.target.value, 10))
-                  }
-                  className="w-16 p-2 border rounded-lg text-center"
-                />
+                  -
+                </button>
+                <span className="font-bold text-lg">{item.quantity}</span>
+                <button
+                  onClick={() => handleQuantityChange(item.id, item.size, 'increase')}
+                  className="px-3 py-1 bg-gray-200 rounded-lg text-lg hover:bg-gray-300"
+                >
+                  +
+                </button>
                 <button
                   onClick={() => handleRemoveItem(item.id, item.size)}
                   className="text-red-600 hover:text-red-800 font-semibold"
